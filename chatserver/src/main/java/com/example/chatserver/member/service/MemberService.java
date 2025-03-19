@@ -29,6 +29,6 @@ public class MemberService {
                 .build();
 
         Member member = memberRepository.save(newMember);
-        return null;
+        return member;
     }
 }
