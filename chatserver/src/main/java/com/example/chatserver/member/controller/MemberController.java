@@ -1,5 +1,6 @@
 package com.example.chatserver.member.controller;
 
+import com.example.chatserver.common.auth.JwtTokenProvider;
 import com.example.chatserver.member.domain.Member;
 import com.example.chatserver.member.dto.MemberLoginReqDto;
 import com.example.chatserver.member.dto.MemberSaveReqDto;
@@ -11,13 +12,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
 
-    public MemberController(MemberService memberService) {
+    private final JwtTokenProvider jwtTokenProvider;
+
+    public MemberController(MemberService memberService, JwtTokenProvider jwtTokenProvider) {
         this.memberService = memberService;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/create")
@@ -32,5 +39,10 @@ public class MemberController {
        Member member =  memberService.login(memberLoginReqDto);
 
         //일치할 경우 access 토큰 발행
+        String jwtToekn = jwtTokenProvider.createToken(member.getEmail(), member.getRole().toString());
+        Map<String, Object> loginInfo = new HashMap<>();
+        loginInfo.put("id", member.getId());
+        loginInfo.put("token", jwtToekn);
+        return new ResponseEntity<>(loginInfo, HttpStatus.OK);
     }
 }
