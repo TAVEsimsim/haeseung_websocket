@@ -41,7 +41,7 @@ public class MemberService {
         Member member = memberRepository.findByEmail(memberLoginReqDto.getEmail())
                 .orElseThrow(()-> new EntityNotFoundException("존재하지 않는 이메일입니다."));
 
-        if(passwordEncoder.matches(memberLoginReqDto.getPassword(), member.getPassword())){
+        if(!passwordEncoder.matches(memberLoginReqDto.getPassword(), member.getPassword())){
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
         return member;
