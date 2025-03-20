@@ -9,7 +9,7 @@ import java.io.IOException;
 public class JWTAuthFilter extends GenericFilter {
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        chain.doFilter(request,response);
     }
 }
