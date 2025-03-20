@@ -25,13 +25,14 @@ import java.util.List;
 @Component
 public class JWTAuthFilter extends GenericFilter {
 
-    private final ServletConfig servletConfig;
+//    private final ServletConfig servletConfig;
+
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    public JWTAuthFilter(@Qualifier("servletConfig") ServletConfig servletConfig) {
-        this.servletConfig = servletConfig;
-    }
+//    public JWTAuthFilter(@Qualifier("servletConfig") ServletConfig servletConfig) {
+//        this.servletConfig = servletConfig;
+//    }
 
     @Override
     public void doFilter(ServletRequest request, //request 안에 토큰이 들어가 있음
@@ -45,7 +46,7 @@ public class JWTAuthFilter extends GenericFilter {
         try {
 
             if (token != null) { //토큰이 있는 경우에만 검증하겠다.
-                if (token.substring(0, 7).equals("Bearer ")) { //Bearer이 앞에 붙어있는지 확인
+                if (!token.substring(0, 7).equals("Bearer ")) { //Bearer이 앞에 붙어있는지 확인
                     throw new AuthenticationServiceException("Bearer 형식이 아닙니다.");
                 }
                 String jwtToken = token.substring(7);//Bearer 떄내고 토큰의 원본만 꺼냄
@@ -60,7 +61,7 @@ public class JWTAuthFilter extends GenericFilter {
                 Claims claims = Jwts.parserBuilder()
                         .setSigningKey(secretKey)
                         .build()
-                        .parseClaimsJwt(jwtToken)
+                        .parseClaimsJws(jwtToken)
                         .getBody();
 
                 //authentication 객체 생성
