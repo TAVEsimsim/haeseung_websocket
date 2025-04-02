@@ -25,7 +25,7 @@ public class ChatRoom extends BaseTimeEntity {
     private String name;
 
     @Builder.Default
-    private String isGroupCha = "N";
+    private String isGroupChat = "N";
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<ChatParticipant> chatParticipants = new ArrayList<>();
