@@ -12,6 +12,7 @@ import com.example.chatserver.chat.repository.ReadStatusRepository;
 import com.example.chatserver.member.domain.Member;
 import com.example.chatserver.member.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,5 +64,23 @@ public class ChatService {
                     .build();
             readStatusRepository.save(readStatus);
         }
+    }
+
+    public void createGroupRoom(String chatRoomName){
+        Member member = memberRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() -> new EntityNotFoundException("member cannot be found"));
+
+//        채칭방 생성
+        ChatRoom chatRoom = ChatRoom.builder()
+                .name(chatRoomName)
+                .isGroupCha("Y")
+                .build();
+                chatRoomRepository.save(chatRoom);
+
+//        채팅참여자로 개설자를 추가
+        ChatParticipant chatParticipant = ChatParticipant.builder()
+                .chatRoom(chatRoom)
+                .member(member)
+                .build();
+        chatParticipantRepository.save(chatParticipant);
     }
 }
