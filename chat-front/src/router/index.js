@@ -7,10 +7,6 @@ import StompChatPage from "@/views/StompChatPage.vue"
 import GroupChattingList from "@/views/GroupChattingList.vue"
 import MyChatPage from "@/views/MyChatPage.vue"
 
-
-
-
-
 const routes = [
     {
         path:'/member/create',
@@ -47,7 +43,6 @@ const routes = [
         name: 'MyChatPage',
         component: MyChatPage
     }
-
 
 ]
 
